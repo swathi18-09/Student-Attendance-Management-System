@@ -1,0 +1,131 @@
+import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
+
+public class SAMS4 {
+
+public static void main(String[] args) {
+Scanner scanner = new Scanner(System.in);
+Map<String, char[][]> attendanceMap = new HashMap<>();
+
+String dayAndDate;
+System.out.print("Enter the day and date ");
+dayAndDate = scanner.nextLine();
+
+// Predefined data for 5 students
+String[] names = {"John Doe", "Jane Smith", "Bob Johnson", "Alice Williams", "Tom
+Brown"};
+int[] rollNumbers = {101, 102, 103, 104, 105};
+int numStudents = names.length;
+
+int totalSubjects;
+System.out.print("Enter the number of subjects for the day ");
+totalSubjects = scanner.nextInt();
+char[][] attendance = new char[numStudents][totalSubjects];
+attendanceMap.put(dayAndDate, attendance);
+
+int choice;
+do {
+System.out.println("\n1. Enter Day and Date");
+System.out.println("2. Mark Attendance");
+System.out.println("3. Display Attendance");
+System.out.println("4. Exit");
+
+7
+
+System.out.print("Enter your choice ");
+choice = scanner.nextInt();
+
+switch (choice) {
+case 1
+scanner.nextLine(); // Consume newline
+System.out.print("Enter the day and date ");
+dayAndDate = scanner.nextLine();
+attendance = attendanceMap.get(dayAndDate);
+if (attendance == null) {
+attendance = new char[numStudents][totalSubjects];
+attendanceMap.put(dayAndDate, attendance);
+}
+break;
+case 2
+markAttendance(scanner, names, rollNumbers, attendance, totalSubjects);
+break;
+case 3
+scanner.nextLine(); // Consume newline
+System.out.print("Enter the day and date for attendance display ");
+String displayDate = scanner.nextLine();
+
+displayAttendance(displayDate, names, rollNumbers, attendanceMap, totalSubjects);
+
+break;
+case 4
+System.out.println("Exiting the program. Goodbye!");
+break;
+default
+System.out.println("Invalid choice. Please enter a valid option.");
+}
+} while (choice != 4);
+}
+
+private static void markAttendance(Scanner scanner, String[] names, int[] rollNumbers,
+
+8
+char[][] attendance, int totalSubjects) {
+for (int i = 0; i < names.length; i++) {
+System.out.println("\nStudent " + (i + 1) + " ");
+System.out.println("Name " + names[i]);
+System.out.println("Roll Number " + rollNumbers[i]);
+
+for (int j = 0; j < totalSubjects; j++) {
+System.out.print("Enter attendance for " + names[i] + " - " + rollNumbers[i] + " in
+Subject " + (j + 1) + " (P for present, A for absent) ");
+attendance[i][j] = scanner.next().charAt(0);
+}
+}
+}
+
+private static void displayAttendance(String askedDate, String[] names, int[] rollNumbers, Map<String, char[][]> attendanceMap, int totalSubjects) {
+char[][] attendance = attendanceMap.get(askedDate);
+if (attendance == null) {
+System.out.println("No attendance data found for the specified date.");
+return;
+}
+
+System.out.println("\nAttendance Details for " + askedDate + " \n");
+
+// Displaying header
+System.out.printf("%-15s %-15s", "Name", "Roll Number");
+for (int i = 1; i <= totalSubjects; i++) {
+System.out.printf(" %-15s", "Subject " + i);
+}
+System.out.println(" Attendance %");
+System.out.println();
+
+// Displaying student details for the asked date
+for (int i = 0; i < names.length; i++) {
+
+9
+
+System.out.printf("%-15s %-15d", names[i], rollNumbers[i]);
+
+int presentCount = 0;
+for (int j = 0; j < totalSubjects; j++) {
+System.out.printf(" %-15c", attendance[i][j]);
+if (attendance[i][j] == 'P') {
+presentCount++;
+}
+}
+
+// Calculate attendance percentage
+double attendancePercentage = (double) presentCount / totalSubjects * 100;
+System.out.printf(" %-15.2f", attendancePercentage);
+
+// Display warning message if attendance is less than 65%
+if (attendancePercentage < 65) {
+System.out.println(" Warning Low Attendance!");
+} else {
+System.out.println();
+}
+}
+}
+}
